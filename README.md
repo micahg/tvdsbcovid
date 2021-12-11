@@ -25,7 +25,7 @@ Where each comma-delimited entry is a user or pass.
 ### Running the Container
 
 ```
-docker run --env-file ./env.list tvdsb
+docker run --env-file ./env.list tvdsb:0.0.1
 ```
 
 ### Running the Container Daily
