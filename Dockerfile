@@ -1,6 +1,6 @@
 FROM python:3.9-alpine
 
-RUN pip install requests
+RUN python -m pip install requests beautifulsoup4
 
 COPY screening.py ./
 
