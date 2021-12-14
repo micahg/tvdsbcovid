@@ -2,13 +2,13 @@
 
 Automated COVID screening utility. Don't be an ass - keep your people home if they're not feeling well!
 
-## Build Docker Image
-
-```
-docker build -t tvdsb:0.0.1  .
-```
-
 ## Running Docker Container
+
+### Getting the Docker Image
+
+```
+docker pull mfg81/tvdsbcovid:0.0.1
+```
 
 ### Setting Up TVDSB Accounts
 
@@ -20,20 +20,6 @@ PASS=D,E,F
 ```
 
 Where each comma-delimited entry is a user or pass.
-
-
-### Building the Docker Image
-
-```
-docker build . -t mfg81/tvdsbcovid:0.0.1
-docker push mfg81/tvdsbcovid:0.0.1
-```
-
-### Getting the Docker Image
-
-```
-docker pull mfg81/tvdsbcovid:0.0.1
-```
 
 ### Running the Container
 
@@ -50,3 +36,10 @@ Use CRON for linux -- sorry windows. Here is a daily entry
 ```
 
 The above should be 7am on weekdays.
+
+## Building the Docker Image
+
+```
+docker build . -t mfg81/tvdsbcovid:0.0.1
+docker push mfg81/tvdsbcovid:0.0.1
+```
