@@ -9,6 +9,18 @@ USER_INPUT = 'txtUsername'
 PASS_INPUT = 'txtPassword'
 
 
+def process_form_soup(soup, user, pwd):
+    """Process HTML for values."""
+    form = soup.find('form')
+    inputs = filter(lambda inp: not inp['id'] == 'rdoOptions_1', form.find_all('input'))
+    form_vals = {inp['name']: inp['value'] if inp.has_attr('value') else None for inp in inputs}
+    if USER_INPUT in form_vals:
+        form_vals[USER_INPUT] = user
+    if PASS_INPUT in form_vals:
+        form_vals[PASS_INPUT] = pwd
+    return form_vals
+
+
 def screen(user, pwd):
     """Screen a user."""
     print('Screening {}:{}'.format(user, pwd))
@@ -16,21 +28,20 @@ def screen(user, pwd):
     sess = requests.Session()
     resp = sess.get(MAIN_PAGE)
     if not resp.status_code == 200:
-        print('HTTPS status {} when fetching {}'.format(req.status, MAIN_PAGE))
+        print('HTTPS status {} when fetching {}'.format(resp.status, MAIN_PAGE))
         print('Response content: {}'.format(resp.content))
         sys.exit(1)
 
     soup = BeautifulSoup(resp.content, features="html.parser")
 
-    form = soup.find('form')
-    inputs = filter(lambda inp: not inp['id'] == 'rdoOptions_1', form.find_all('input'))
-    form_vals = {inp['name']: inp['value'] if inp.has_attr('value') else None for inp in inputs}
-    if USER_INPUT in form_vals:
-        form_vals[USER_INPUT] = user
-    if PASS_INPUT in form_vals:
-        form_vals[PASS_INPUT] = pwd
+    form_vals = process_form_soup(soup, user, pwd)
 
     resp = sess.post(MAIN_PAGE, data=form_vals)
+    if not resp.status_code == 200:
+        print('HTTPS status {} when fetching {}'.format(resp.status, MAIN_PAGE))
+        print('Response content: {}'.format(resp.content))
+        sys.exit(1)
+
     soup = BeautifulSoup(resp.content, features="html.parser")
     error_span = soup.find('span', id='lblError')
     error = "" if error_span is None else error_span.text
@@ -38,15 +49,14 @@ def screen(user, pwd):
         print('Page responds with error: "{}"'.format(error))
         sys.exit(1)
 
-    form = soup.find('form')
-    inputs = filter(lambda inp: not inp['id'] == 'rdoOptions_1', form.find_all('input'))
-    form_vals = {inp['name']: inp['value'] if inp.has_attr('value') else None for inp in inputs}
-    if USER_INPUT in form_vals:
-        form_vals[USER_INPUT] = user
-    if PASS_INPUT in form_vals:
-        form_vals[PASS_INPUT] = pwd
+    form_vals = process_form_soup(soup, user, pwd)
 
     resp = sess.post(MAIN_PAGE, data=form_vals)
+    if not resp.status_code == 200:
+        print('HTTPS status {} when fetching {}'.format(resp.status, MAIN_PAGE))
+        print('Response content: {}'.format(resp.content))
+        sys.exit(1)
+
     soup = BeautifulSoup(resp.content, features="html.parser")
     print(soup.find('p').text)
 
