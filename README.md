@@ -22,12 +22,31 @@ PASS=D,E,F
 Where each comma-delimited entry is a user or pass.
 
 
+### Building the Docker Image
+
+```
+docker build . -t mfg81/tvdsbcovid:0.0.1
+docker push mfg81/tvdsbcovid:0.0.1
+```
+
+### Getting the Docker Image
+
+```
+docker pull mfg81/tvdsbcovid:0.0.1
+```
+
 ### Running the Container
 
 ```
-docker run --env-file ./env.list tvdsb:0.0.1
+docker run --env-file ./env.list mfg81/tvdsbcovid:0.0.1
 ```
 
 ### Running the Container Daily
 
-Use CRON for linux -- sorry windows.
+Use CRON for linux -- sorry windows. Here is a daily entry
+
+```
+0 7 * * 1-5 docker run --env-file ./env.list mfg81/tvdsbcovid:0.0.1
+```
+
+The above should be 7am on weekdays.
